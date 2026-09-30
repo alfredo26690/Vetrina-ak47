@@ -1,0 +1,96 @@
+<title>Vetrina 4 Box</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- In Telegram questo script adatta i colori al tema dell'utente. Fuori da Telegram viene ignorato. -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600&display=swap">
+<style>
+/* Layout: griglia 2×2 di scomparti foto con la cifra sotto ciascuno */
+:root{
+  --bg:#eef0f5; --card:#ffffff; --fg:#161a24; --muted:#6b7285; --line:#d5dae5; --slot:#e4e8f1;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"Figtree",-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1219; --card:#1b202b; --fg:#eef1f7; --muted:#98a0b3; --line:#323a4c; --slot:#232a38; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1219; --card:#1b202b; --fg:#eef1f7; --muted:#98a0b3; --line:#323a4c; --slot:#232a38; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);margin:0;padding:16px;padding-block:18px 28px}
+.wrap{max-width:720px;margin:0 auto}
+h1{font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:-.01em;margin:0 0 16px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.box{background:var(--card);border-radius:18px;overflow:hidden;border:1px solid var(--line);display:flex;flex-direction:column}
+.photo{aspect-ratio:1/1;max-width:100%;background:var(--slot);display:grid;place-items:center;position:relative}
+.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.empty{display:grid;justify-items:center;gap:6px;color:var(--muted);font-size:13px;font-weight:600;border:2px dashed var(--line);border-radius:14px;inset:10px;position:absolute;align-content:center}
+.empty svg{width:30px;height:30px}
+.value{font-family:var(--display);font-weight:800;font-size:28px;text-align:center;padding:12px 8px 14px;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.contacts{display:grid;gap:10px;margin-top:18px}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;padding:15px;border-radius:14px;font-weight:600;font-size:16px;text-decoration:none;color:#fff}
+.btn svg{width:22px;height:22px;flex:none}
+.btn:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.tg{background:#2481cc}
+.sg{background:#3a76f0}
+.btn small{font-weight:500;opacity:.85}
+</style>
+
+<div class="wrap">
+  <h1 id="title"></h1>
+  <div class="grid" id="grid"></div>
+  <div class="contacts">
+    <a class="btn tg" id="btnTg" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.4 3.6 2.9 10.8c-1 .4-1 1.8.1 2.1l4.6 1.5 1.8 5.6c.3.8 1.3 1 1.9.4l2.6-2.5 4.7 3.5c.7.5 1.7.1 1.9-.7l3-15.1c.2-1-.8-1.8-1.7-1.4ZM9.6 14.2l8-6.8-6.3 8.3-.3 3-1.4-4.5Z"/></svg><span>Contattami su Telegram <small id="tgName"></small></span></a>
+    <a class="btn sg" id="btnSg" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z"/></svg><span>Unisciti al canale Signal</span></a>
+  </div>
+</div>
+
+<script>
+/* ============ MODIFICA QUI ============
+   title: il titolo in alto
+   img:   il nome della foto (es. "foto1.jpg", nella stessa cartella del file). Lascia "" finché non ce l'hai.
+   text:  la scritta sotto lo scomparto */
+const TITLE = "La mia vetrina";
+const BOXES = [
+  { img: "", text: "500€" },
+  { img: "", text: "20€"  },
+  { img: "", text: "40%"  },
+  { img: "", text: "10€"  },
+];
+
+/* TELEGRAM: il tuo username (con o senza @)
+   SIGNAL:   il link del tuo canale/gruppo Signal (inizia con https://signal.group/...). Lascia "" per nascondere il pulsante. */
+const TELEGRAM = "@ak47forever";
+const SIGNAL   = "https://signal.group/#CjQKINhGwZShFiEhfCJUUM1ERBHy_zvkPEC2-R61N9G5xCxFEhCxZK490R5tUn8RcTxK9yXR";
+/* ====================================== */
+
+const tg = window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.platform && window.Telegram.WebApp.platform !== "unknown" ? window.Telegram.WebApp : null;
+if (tg){
+  tg.ready(); tg.expand();
+  const p = tg.themeParams || {}, r = document.documentElement.style;
+  if (p.bg_color){ r.setProperty("--bg", p.secondary_bg_color || p.bg_color); r.setProperty("--card", p.bg_color); }
+  if (p.text_color) r.setProperty("--fg", p.text_color);
+  if (p.hint_color) r.setProperty("--muted", p.hint_color);
+  if (tg.colorScheme === "dark") document.documentElement.dataset.theme = "dark";
+}
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const cam = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4Z"/><circle cx="12" cy="13" r="3.5"/></svg>`;
+document.getElementById("title").textContent = TITLE;
+document.getElementById("grid").innerHTML = BOXES.map((b, i) => `
+  <div class="box">
+    <div class="photo">${b.img ? `<img src="${esc(b.img)}" alt="Foto ${i+1}">` : `<div class="empty">${cam}Foto ${i+1}</div>`}</div>
+    <div class="value">${esc(b.text)}</div>
+  </div>`).join("");
+
+const user = TELEGRAM.replace(/^@/, "").trim();
+const btnTg = document.getElementById("btnTg"), btnSg = document.getElementById("btnSg");
+btnTg.href = "https://t.me/" + user;
+document.getElementById("tgName").textContent = "@" + user;
+btnTg.hidden = !user;
+btnSg.href = SIGNAL;
+btnSg.hidden = !SIGNAL.trim();
+if (tg){
+  btnTg.addEventListener("click", e => { e.preventDefault(); tg.openTelegramLink(btnTg.href); });
+  btnSg.addEventListener("click", e => { e.preventDefault(); tg.openLink(btnSg.href); });
+}
+</script>
