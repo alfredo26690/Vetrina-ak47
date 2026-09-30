@@ -82,33 +82,38 @@
 <body>
 
   <div class="grid">
-    <div class="item"><img id="foto1" alt="fumo top 5€ al g"><p>fumo top 5€ al g</p></div>
-    <div class="item"><img id="foto2" alt="cipolle1k/500/100g"><p>petardi/batteri/500/100g</p></div>
-    <div class="item"><img id="foto3" alt="petardi/batterie"><p>petardi/batterie</p></div>
-    <div class="item"><img id="foto4" alt="rimborsi amazon/zalando e altri"><p>rimborsi amazon/zalando e altri</p></div>
+    <div class="item"><img id="foto1" alt="Tokyo"><p>Tokyo</p></div>
+    <div class="item"><img id="foto2" alt="Palermo"><p>Palermo</p></div>
+    <div class="item"><img id="foto3" alt="Italia"><p>Italia</p></div>
+    <div class="item"><img id="foto4" alt="Spagna"><p>Spagna</p></div>
   </div>
 
   <div class="box">
     <h2>📦 Spedizioni</h2>
-    <p>Spedizioni piccole da 10€ · tempistiche 2 giorni</p>
+    <p>Spedizioni piccole da 10€ · 2, max 3 giorni</p>
+  </div>
+
+  <div class="box">
+    <h2>💳 Pagamenti</h2>
+    <p>PayPal · Bonifico · Contanti · Cripto</p>
   </div>
 
   <button class="btn signal" id="btnSignal">Canale Signal</button>
-  <button class="btn" id="btnCanale">Canale Telegram</button>
+  <button class="btn" id="btnCanale">Gruppo Telegram</button>
+  <p class="note" style="color:#2eaa4f;font-weight:600;">Per ordini contattami 👇</p>
+  <button class="btn" id="btnTelegram">Contatto secondario Telegram</button>
 
-  <button class="btn" id="btnTelegram">Contattami su Telegram</button>
-
-  <p class="note">Per altri servizi chiedere in privato</p>
-
+  <p class="note" style="color:#2eaa4f;font-weight:600;">Per altri servizi chiedere in privato</p>
+  <p class="note" style="color:#2eaa4f;font-weight:600;">Il contatto ufficiale rimane lo stesso</p>
 
 <script>
   // ====== MODIFICA QUI ======
   const CONFIG = {
     foto: [
-      "https://i.ibb.co/8nb7fNnG/IMG-9989.jpg", // filtrato 5€ al g
-      "https://i.ibb.co/BKF6BYwN/IMG-9991.png", // cipolle 1kg/500/100g
-      "https://i.ibb.co/gkQLwrS/IMG-9992.png", // petardi/batterie
-      "https://i.ibb.co/LDrfF8Kn/IMG-9996.jpg"  // rimborsi amzon/zalando/nike e altro 
+      "https://i.ibb.co/8nb7fNnG/IMG-9989.jpg", // Tokyo
+      "https://i.ibb.co/BKF6BYwN/IMG-9991.png", // Palermo
+      "https://i.ibb.co/gkQLwrS/IMG-9992.png", // Italia
+      "https://i.ibb.co/LDrfF8Kn/IMG-9996.jpg"  // Spagna
     ],
     signal: "https://signal.group/#CjQKINhGwZShFiEhfCJUUM1ERBHy_zvkPEC2-R61N9G5xCxFEhCxZK490R5tUn8RcTxK9yXR",
     telegram: "shoppingak47"
@@ -132,21 +137,12 @@
     if (tg && tg.openTelegramLink) tg.openTelegramLink(url);
     else window.open(url, "_blank");
   };
-   document.getElementById("btnTelegram").onclick = () => {
-    const url = "https://t.me/" + CONFIG.telegram.replace("@", "");
+
+  document.getElementById("btnCanale").onclick = () => {
+    const url = "https://t.me/+JJLcZ9YVVz5hMjVk";
     if (tg && tg.openTelegramLink) tg.openTelegramLink(url);
     else window.open(url, "_blank");
   };
-
-document.getElementById("btnCanale").onclick = () => {
-  const url = "https://t.me/+JJLcZ9YVVz5hMjVk";
-  if (tg && tg.openTelegramLink) tg.openTelegramLink(url);
-  else window.open(url, "_blank");
-};
-</script>
-</body>
-</html>
-
 </script>
 </body>
 </html>
