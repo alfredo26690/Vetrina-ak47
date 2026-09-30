@@ -94,9 +94,12 @@
   </div>
 
   <button class="btn signal" id="btnSignal">Canale Signal</button>
+  <button class="btn" id="btnCanale">Canale Telegram</button>
+
   <button class="btn" id="btnTelegram">Contattami su Telegram</button>
 
   <p class="note">Per altri servizi chiedere in privato</p>
+
 
 <script>
   // ====== MODIFICA QUI ======
@@ -129,6 +132,21 @@
     if (tg && tg.openTelegramLink) tg.openTelegramLink(url);
     else window.open(url, "_blank");
   };
+   document.getElementById("btnTelegram").onclick = () => {
+    const url = "https://t.me/" + CONFIG.telegram.replace("@", "");
+    if (tg && tg.openTelegramLink) tg.openTelegramLink(url);
+    else window.open(url, "_blank");
+  };
+
+document.getElementById("btnCanale").onclick = () => {
+  const url = "https://t.me/+JJLcZ9YVVz5hMjVk";
+  if (tg && tg.openTelegramLink) tg.openTelegramLink(url);
+  else window.open(url, "_blank");
+};
+</script>
+</body>
+</html>
+
 </script>
 </body>
 </html>
