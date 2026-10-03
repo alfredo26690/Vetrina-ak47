@@ -115,6 +115,7 @@
       "https://i.ibb.co/gkQLwrS/IMG-9992.png", // Italia
       "https://i.ibb.co/LDrfF8Kn/IMG-9996.jpg"  // Spagna
     ],
+    videoFUMOTOP5€ALG: "IMG_0042.mov",
     signal: "https://signal.group/#CjQKINhGwZShFiEhfCJUUM1ERBHy_zvkPEC2-R61N9G5xCxFEhCxZK490R5tUn8RcTxK9yXR",
     telegram: "shoppingak47"
   };
@@ -126,6 +127,18 @@
   CONFIG.foto.forEach((src, i) => {
     document.getElementById("foto" + (i + 1)).src = src;
   });
+  if (CONFIG.videoTokyo) {
+  const v = document.getElementById("video1");
+  const img = document.getElementById("foto1");
+  v.poster = CONFIG.foto[0];
+  v.src = CONFIG.videoTokyo;
+  v.style.display = "block";
+  img.style.display = "none";
+  v.play().catch(() => {});
+  v.onclick = () => { v.muted = !v.muted; if (v.paused) v.play(); };
+  v.onerror = () => { v.style.display = "none"; img.style.display = "block"; };
+}
+
 
   document.getElementById("btnSignal").onclick = () => {
     if (tg && tg.openLink) tg.openLink(CONFIG.signal);
