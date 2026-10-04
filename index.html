@@ -23,6 +23,21 @@ const LISTINO = [
 </script>
 <!-- ================= FINE LISTINO ================= -->
 <style>
+       .servizi { margin-top: 10px; display: flex; flex-direction: column; gap: 10px; }
+  .servizio {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 16px; border-radius: 14px;
+    color: #fff; font-size: 16px; font-weight: 800;
+    text-shadow: 0 1px 3px rgba(0,0,0,.3);
+    animation: entra .6s ease-out both, pulsa 3s ease-in-out infinite;
+  }
+  .servizio small { display: block; font-size: 13px; font-weight: 500; opacity: .9; margin-top: 2px; }
+  .servizio .emoji { font-size: 30px; animation: galleggia 2.5s ease-in-out infinite; }
+  .s1 { background: linear-gradient(135deg, #a23dff, #3d9aff); }
+  .s2 { background: linear-gradient(135deg, #ff3d6e, #ff9a3d); animation-delay: .15s, .5s; }
+  .s3 { background: linear-gradient(135deg, #3ddc84, #1fa7a0); animation-delay: .3s, 1s; }
+  .s4 { background: linear-gradient(135deg, #ffb23d, #ff3d6e); animation-delay: .45s, 1.5s; }
+
   :root {
     --bg: var(--tg-theme-bg-color, #ffffff);
     --text: var(--tg-theme-text-color, #111111);
@@ -249,6 +264,26 @@ const LISTINO = [
         <div class="label">Pagamenti</div>
         <div class="value">PayPal · Bonifico · Contanti · Cripto</div>
       </div>
+    </div>
+  </div>
+  <!-- ALTRI SERVIZI -->
+  <div class="section-title">✨ Altri servizi</div>
+  <div class="servizi">
+    <div class="servizio s1">
+      <span class="emoji">📱</span>
+      <div>Vuoi una Mini App come questa?<small>Te la creiamo da 30€ al mese</small></div>
+    </div>
+    <div class="servizio s2">
+      <span class="emoji">👕</span>
+      <div>Vendita abbigliamento<small>Capi e stili per tutti i gusti</small></div>
+    </div>
+    <div class="servizio s3">
+      <span class="emoji">🏷️</span>
+      <div>Etichette per spedizioni<small>Spedire non è mai stato così facile</small></div>
+    </div>
+    <div class="servizio s4">
+      <span class="emoji">🔍</span>
+      <div>Qualsiasi servizio? Te lo trovo!<small>Chiedi pure, ci pensiamo noi</small></div>
     </div>
   </div>
 
