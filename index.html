@@ -159,6 +159,14 @@ const LISTINO = [
   .icon { font-size: 22px; line-height: 1; }
   .label { font-size: 13px; color: var(--hint); }
   .value { font-size: 16px; font-weight: 600; margin-top: 2px; }
+  .btn.contact.animato {
+    color: #fff;
+    background: linear-gradient(270deg, #ff3d6e, #ff9a3d, #ffd23d, #3ddc84, #3d9aff, #a23dff, #ff3d6e);
+    background-size: 600% 600%;
+    animation: gradiente 8s ease infinite, pulsa 2.4s ease-in-out infinite;
+    text-shadow: 0 1px 3px rgba(0,0,0,.35);
+  }
+
 </style>
 </head>
 <body>
@@ -212,7 +220,7 @@ const LISTINO = [
     <button class="btn telegram" onclick="openTg('https://t.me/+JJLcZ9YVVz5hMjVk')">
       Gruppo Telegram
     </button>
-    <button class="btn contact" onclick="openTg('https://t.me/shoppingak47')">
+    <button class="btn contact animato" onclick="openTg('https://t.me/shoppingak47')">
       Contatto secondario: @shoppingak47
     </button>
   </div>
