@@ -1,15 +1,32 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>Vetrina</title>
+<title>Shop</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<!-- =====================================================
+     LISTINO PREZZI / CARATTERISTICHE  —  MODIFICA SOLO QUI
+     Ogni riga tra { } è una voce. Per aggiungerne una,
+     copia una riga intera (virgola finale compresa).
+     Per toglierla, cancella la riga intera.
+     ===================================================== -->
+<script>
+const LISTINO = [
+  { nome: "Prodotto 1", prezzo: "10€", dettagli: "Caratteristica 1" },
+  { nome: "Prodotto 2", prezzo: "20€", dettagli: "Caratteristica 2" },
+  { nome: "Prodotto 3", prezzo: "30€", dettagli: "Caratteristica 3" },
+  { nome: "Prodotto 4", prezzo: "40€", dettagli: "Caratteristica 4" },
+  { nome: "Prodotto 5", prezzo: "50€", dettagli: "Caratteristica 5" },
+];
+</script>
+<!-- ================= FINE LISTINO ================= -->
 <style>
   :root {
     --bg: var(--tg-theme-bg-color, #ffffff);
     --text: var(--tg-theme-text-color, #111111);
-    --hint: var(--tg-theme-hint-color, #8a8a8a);
+    --hint: var(--tg-theme-hint-color, #888888);
     --card: var(--tg-theme-secondary-bg-color, #f2f2f5);
     --btn: var(--tg-theme-button-color, #2481cc);
     --btn-text: var(--tg-theme-button-text-color, #ffffff);
@@ -19,143 +36,247 @@
     background: var(--bg);
     color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    padding: 16px 16px 32px;
+    padding: 16px;
+    padding-bottom: 32px;
   }
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
+
+  /* ---------- FOTO ---------- */
+  .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .item {
+    position: relative;
     background: var(--card);
     border-radius: 14px;
     overflow: hidden;
   }
-  .item img {
-    width: 100%;
+  .item.first { grid-column: 1 / -1; }
+  .item img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; }
+  .item.first img { aspect-ratio: 4 / 3; }
+  .desc { padding: 10px 12px; font-size: 14px; line-height: 1.35; }
+  .item video { width: 100%; display: block; background: #000; }
+  .num {
+    position: absolute; top: 10px; left: 10px;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(0,0,0,.65); color: #fff;
+    font-size: 22px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2;
+  }
+  /* se la foto manca si vede un riquadro col numero */
+  .placeholder {
     aspect-ratio: 1 / 1;
-    object-fit: cover;
-    display: block;
-    background: var(--card);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 64px; font-weight: 800; color: var(--hint);
   }
-  .item p {
-    padding: 10px 12px;
-    font-weight: 600;
-    font-size: 16px;
+  .item.first .placeholder { aspect-ratio: 4 / 3; }
+
+  /* ---------- LISTINO ---------- */
+  .section-title { margin-top: 24px; margin-bottom: 10px; font-size: 18px; font-weight: 700; }
+  .listino { background: var(--card); border-radius: 14px; padding: 4px 16px; }
+  .voce { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; }
+  .voce + .voce { border-top: 1px solid rgba(127,127,127,.2); }
+  .voce-nome { font-size: 16px; font-weight: 600; }
+  .voce-dettagli { font-size: 13px; color: var(--hint); margin-top: 3px; }
+  .voce-prezzo { font-size: 16px; font-weight: 700; color: var(--btn); white-space: nowrap; }
+
+  /* ---------- BENVENUTO ---------- */
+  .hero { text-align: center; margin-bottom: 20px; padding: 18px 8px 8px; }
+  .hero-small {
+    font-size: 15px; font-weight: 600; color: var(--hint);
+    letter-spacing: 3px; text-transform: uppercase;
+    animation: entra 0.8s ease-out both;
   }
-  .box {
-    background: var(--card);
-    border-radius: 14px;
-    padding: 14px 16px;
-    margin-top: 16px;
+  .hero-big {
+    font-size: 54px; font-weight: 900; line-height: 1.1; margin-top: 4px;
+    background: linear-gradient(90deg, #ff3d6e, #ff9a3d, #ffd23d, #3ddc84, #3d9aff, #a23dff, #ff3d6e);
+    background-size: 300% 100%;
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+    animation: entra 0.8s ease-out 0.2s both, scorri 4s linear infinite, galleggia 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px rgba(255,150,60,.45));
   }
-  .box h2 {
-    font-size: 15px;
-    margin-bottom: 4px;
+  .hero-line {
+    height: 4px; width: 60%; margin: 12px auto 0; border-radius: 4px;
+    background: linear-gradient(90deg, transparent, #ffd23d, #ff3d6e, #3d9aff, transparent);
+    background-size: 200% 100%;
+    animation: scorri 3s linear infinite;
   }
-  .box p {
-    font-size: 14px;
-    color: var(--hint);
+  @keyframes scorri { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
+  @keyframes galleggia { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+  @keyframes entra { from { opacity: 0; transform: scale(.7); } to { opacity: 1; transform: scale(1); } }
+
+  /* ---------- FOOTER ANIMATO ---------- */
+  .footer { margin-top: 28px; text-align: center; display: flex; flex-direction: column; gap: 12px; }
+  .badge {
+    padding: 14px 16px; border-radius: 14px;
+    font-size: 17px; font-weight: 800; color: #fff;
+    background: linear-gradient(270deg, #ff3d6e, #ff9a3d, #ffd23d, #3ddc84, #3d9aff, #a23dff, #ff3d6e);
+    background-size: 600% 600%;
+    animation: gradiente 8s ease infinite, pulsa 2.4s ease-in-out infinite;
+    text-shadow: 0 1px 3px rgba(0,0,0,.35);
   }
-  .note {
-    text-align: center;
-    margin-top: 16px;
-    font-size: 14px;
-    color: var(--hint);
+  .badge.due { animation-delay: 0s, 1.2s; }
+  .live {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--hint);
   }
+  .dot {
+    width: 10px; height: 10px; border-radius: 50%; background: #3ddc84;
+    animation: lampeggia 1.2s ease-in-out infinite;
+  }
+  @keyframes gradiente {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  @keyframes pulsa {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+  }
+  @keyframes lampeggia {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(61,220,132,.7); }
+    50% { opacity: .5; box-shadow: 0 0 0 6px rgba(61,220,132,0); }
+  }
+
+  /* ---------- PULSANTI ---------- */
+  .buttons { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
   .btn {
-    display: block;
-    width: 100%;
-    border: none;
-    border-radius: 12px;
-    padding: 14px;
-    margin-top: 12px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    background: var(--btn);
-    color: var(--btn-text);
+    display: block; width: 100%;
+    padding: 15px; border: none; border-radius: 12px;
+    font-size: 16px; font-weight: 600; text-align: center;
+    color: #fff; cursor: pointer;
   }
-  .btn.signal { background: #3a76f0; color: #fff; }
+  .btn.signal { background: #3a76f0; }
+  .btn.telegram { background: #2aabee; }
+  .btn.contact { background: var(--card); color: var(--text); }
+
+  /* ---------- INFO ---------- */
+  .info {
+    margin-top: 20px; background: var(--card);
+    border-radius: 14px; padding: 16px;
+  }
+  .row { display: flex; gap: 12px; align-items: flex-start; padding: 8px 0; }
+  .row + .row { border-top: 1px solid rgba(127,127,127,.2); }
+  .icon { font-size: 22px; line-height: 1; }
+  .label { font-size: 13px; color: var(--hint); }
+  .value { font-size: 16px; font-weight: 600; margin-top: 2px; }
 </style>
 </head>
 <body>
 
-  <div class="grid">
-    <div class="item"><img id="foto1" alt="FUMO TOP 5€ AL G"><video id="video1" muted loop playsinline autoplay preload="metadata" style="display:none;width:100%;aspect-ratio:1/1;object-fit:cover;"></video><p> FUMO TOP 5€ AL G </p></div>
-    <div class="item"><img id="foto2" alt="CIPO 1KG/500/100G"><p>CIPO 1KG/500/100G</p></div>
-    <div class="item"><img id="foto3" alt="PETARDI/BATTERIE"><p>PETARDI/BATTERIE</p></div>
-    <div class="item"><img id="foto4" alt="RIMBORSI AMAZON/ZALANDO/ALTRI"><p>RIMBORSI AMAZON/ZALANDO/ALTRI</p></div>
+  <!-- BENVENUTO -->
+  <div class="hero">
+    <div class="hero-small">✨ Benvenuti da ✨</div>
+    <div class="hero-big">AK47</div>
+    <div class="hero-line"></div>
   </div>
 
-  <div class="box">
-    <h2>📦 Spedizioni</h2>
-    <p>Spedizioni piccole da 10€ · 2, max 3 giorni</p>
+  <!-- FOTO: carica foto1.jpg ... foto4.jpg e video1.mp4 nella stessa cartella -->
+  <div class="gallery">
+    <div class="item first">
+      <span class="num">1</span>
+      <img src="foto1.jpg" alt="Foto 1" onerror="this.outerHTML='<div class=placeholder>1</div>'">
+      <video src="video1.mp4" controls playsinline preload="metadata"></video>
+      <div class="desc">Descrizione 1</div>
+    </div>
+    <div class="item">
+      <span class="num">2</span>
+      <img src="foto2.jpg" alt="Foto 2" onerror="this.outerHTML='<div class=placeholder>2</div>'">
+      <div class="desc">Descrizione 2</div>
+    </div>
+    <div class="item">
+      <span class="num">3</span>
+      <img src="foto3.jpg" alt="Foto 3" onerror="this.outerHTML='<div class=placeholder>3</div>'">
+      <div class="desc">Descrizione 3</div>
+    </div>
+    <div class="item">
+      <span class="num">4</span>
+      <img src="foto4.jpg" alt="Foto 4" onerror="this.outerHTML='<div class=placeholder>4</div>'">
+      <div class="desc">Descrizione 4</div>
+    </div>
+    <div class="item">
+      <span class="num">5</span>
+      <img src="foto5.jpg" alt="Foto 5" onerror="this.outerHTML='<div class=placeholder>5</div>'">
+      <div class="desc">Descrizione 5</div>
+    </div>
   </div>
 
-  <div class="box">
-    <h2>💳 Pagamenti</h2>
-    <p>PayPal · Bonifico · Contanti · Cripto</p>
+  <!-- LISTINO (i dati si modificano in alto nel file) -->
+  <div class="section-title">Prezzi e caratteristiche</div>
+  <div class="listino" id="listino"></div>
+
+  <!-- PULSANTI -->
+  <div class="buttons">
+    <button class="btn signal" onclick="openExternal('https://signal.group/#CjQKINhGwZShFiEhfCJUUM1ERBHy_zvkPEC2-R61N9G5xCxFEhCxZK490R5tUn8RcTxK9yXR')">
+      Gruppo Signal
+    </button>
+    <button class="btn telegram" onclick="openTg('https://t.me/+JJLcZ9YVVz5hMjVk')">
+      Gruppo Telegram
+    </button>
+    <button class="btn contact" onclick="openTg('https://t.me/shoppingak47')">
+      Contatto secondario: @shoppingak47
+    </button>
   </div>
 
-  <button class="btn signal" id="btnSignal">Canale Signal</button>
-  <button class="btn" id="btnCanale">Gruppo Telegram</button>
-  <p class="note" style="color:#2eaa4f;font-weight:600;">Per ordini contattami 👇</p>
-  <button class="btn" id="btnTelegram">Contatto secondario Telegram</button>
+  <!-- INFO -->
+  <div class="info">
+    <div class="row">
+      <span class="icon">📦</span>
+      <div>
+        <div class="label">Spedizioni</div>
+        <div class="value">A partire da 10€</div>
+      </div>
+    </div>
+    <div class="row">
+      <span class="icon">⏱️</span>
+      <div>
+        <div class="label">Tempi di consegna</div>
+        <div class="value">24h – max 48h</div>
+      </div>
+    </div>
+    <div class="row">
+      <span class="icon">💳</span>
+      <div>
+        <div class="label">Pagamenti</div>
+        <div class="value">PayPal · Bonifico · Contanti · Cripto</div>
+      </div>
+    </div>
+  </div>
 
-  <p class="note" style="color:#2eaa4f;font-weight:600;">Per altri servizi chiedere in privato</p>
-  <p class="note" style="color:#2eaa4f;font-weight:600;">Il contatto ufficiale rimane lo stesso</p>
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="badge">⭐ Siamo attivi da anni ⭐</div>
+    <div class="badge due">🔄 Pagina in continuo aggiornamento</div>
+    <div class="live"><span class="dot"></span> Online ora</div>
+  </div>
 
 <script>
-  // ====== MODIFICA QUI ======
-  const CONFIG = {
-    foto: [
-      "https://i.ibb.co/8nb7fNnG/IMG-9989.jpg", // FUMO TOP 5€ AL G
-      "https://i.ibb.co/BKF6BYwN/IMG-9991.png", // CIPO 1KG/500/100G
-      "https://i.ibb.co/gkQLwrS/IMG-9992.png", // PETARDI/BATTERIE
-      "https://i.ibb.co/LDrfF8Kn/IMG-9996.jpg"  // RIMBORSI AMAZON/ZALANDO/ALTRI
-    ],
-    videoFUMOTOP5€ALG: "IMG_0042.mov",
-    signal: "https://signal.group/#CjQKINhGwZShFiEhfCJUUM1ERBHy_zvkPEC2-R61N9G5xCxFEhCxZK490R5tUn8RcTxK9yXR",
-    telegram: "shoppingak47"
-  };
-  // ==========================
-
-  const tg = window.Telegram ? window.Telegram.WebApp : null;
+  const tg = window.Telegram && window.Telegram.WebApp;
   if (tg) { tg.ready(); tg.expand(); }
 
-  CONFIG.foto.forEach((src, i) => {
-    document.getElementById("foto" + (i + 1)).src = src;
+  // Costruisce il listino dai dati in alto
+  const box = document.getElementById('listino');
+  LISTINO.forEach(v => {
+    const row = document.createElement('div');
+    row.className = 'voce';
+    row.innerHTML =
+      '<div><div class="voce-nome"></div><div class="voce-dettagli"></div></div>' +
+      '<div class="voce-prezzo"></div>';
+    row.querySelector('.voce-nome').textContent = v.nome || '';
+    row.querySelector('.voce-dettagli').textContent = v.dettagli || '';
+    row.querySelector('.voce-prezzo').textContent = v.prezzo || '';
+    box.appendChild(row);
   });
-  if (CONFIG.videoFUMOTOP5€ALG) {
-  const v = document.getElementById("video1");
-  const img = document.getElementById("foto1");
-  v.poster = CONFIG.foto[0];
-  v.src = CONFIG.videoFUMOTOP5€ALG;
-  v.style.display = "block";
-  img.style.display = "none";
-  v.play().catch(() => {});
-  v.onclick = () => { v.muted = !v.muted; if (v.paused) v.play(); };
-  v.onerror = () => { v.style.display = "none"; img.style.display = "block"; };
-}
 
-
-  document.getElementById("btnSignal").onclick = () => {
-    if (tg && tg.openLink) tg.openLink(CONFIG.signal);
-    else window.open(CONFIG.signal, "_blank");
-  };
-
-  document.getElementById("btnTelegram").onclick = () => {
-    const url = "https://t.me/" + CONFIG.telegram.replace("@", "");
+  // Link Telegram: si aprono dentro Telegram
+  function openTg(url) {
     if (tg && tg.openTelegramLink) tg.openTelegramLink(url);
-    else window.open(url, "_blank");
-  };
-
-  document.getElementById("btnCanale").onclick = () => {
-    const url = "https://t.me/+JJLcZ9YVVz5hMjVk";
-    if (tg && tg.openTelegramLink) tg.openTelegramLink(url);
-    else window.open(url, "_blank");
-  };
+    else window.open(url, '_blank');
+  }
+  // Link esterni (Signal): si aprono nel browser/app esterna
+  function openExternal(url) {
+    if (tg && tg.openLink) tg.openLink(url);
+    else window.open(url, '_blank');
+  }
 </script>
 </body>
 </html>
